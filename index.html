@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devex | Text Studio</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&family=Roboto:wght@400;500;700&family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@400;700&family=Courier+Prime:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #080616; --card: rgba(255,255,255,0.045); --card-border: rgba(255,255,255,0.09);
+        --accent: #8057FF; --accent2: #22D3EE; --accent3: #FF5DA2; --accent4: #FBBF24;
+        --accent-soft: rgba(128,87,255,0.18); --warn: #FF6B8A;
+        --text: #F8FAFC; --muted: #A1A1B5;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        background: var(--bg); color: var(--text); font-family: "Inter", sans-serif;
+        min-height: 100vh; overflow-x: hidden; position: relative;
+      }
+
+      /* Grid overlay — exact match of reference */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 255, 224, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 224, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Ambient blobs — exact match of reference */
+      .bg-anim { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+      .blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.15; pointer-events: none; }
+      .b1 { width: 400px; height: 400px; background: #00ffe0; top: -100px; left: -100px; }
+      .b2 { width: 300px; height: 300px; background: #ff3cac; bottom: -80px; right: -80px; }
+
+      .wrap { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 48px 24px 40px; }
+      nav { display: flex; align-items: center; gap: 12px; margin-bottom: 44px; }
+      .mark {
+        width: 40px; height: 40px; border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+        background-size: 200% 200%; animation: hueShift 8s ease infinite;
+        display: grid; place-items: center; font-weight: 800; font-family: "Poppins", sans-serif; color: #0B0B14;
+        box-shadow: 0 8px 24px rgba(128,87,255,.35);
+      }
+      @keyframes hueShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+      .brand { font-family: "Poppins", sans-serif; font-weight: 700; font-size: 1.25rem; letter-spacing: -.01em; }
+      .badge { margin-left: auto; font-size: .7rem; color: var(--accent2); background: rgba(34,211,238,.12); border: 1px solid rgba(34,211,238,.3); padding: 5px 12px; border-radius: 999px; font-weight: 600; }
+      .hero { margin-bottom: 36px; }
+      .hero h1 {
+        font-family: "Poppins", sans-serif; font-weight: 800; font-size: clamp(1.9rem, 4.5vw, 2.9rem);
+        letter-spacing: -.02em; line-height: 1.15; margin-bottom: 10px;
+      }
+      .hero h1 span {
+        background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+        background-size: 300% 100%; animation: hueShift 10s linear infinite;
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .hero p { color: var(--muted); font-size: .98rem; }
+
+      .card {
+        background: var(--card); border: 1px solid var(--card-border); border-radius: 20px;
+        padding: 26px; backdrop-filter: blur(20px); margin-bottom: 20px;
+      }
+      .card h3 { font-family: "Poppins", sans-serif; font-size: .85rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 18px; }
+
+      textarea#main-text {
+        width: 100%; min-height: 200px; background: rgba(255,255,255,.05); border: 1px solid var(--card-border);
+        color: var(--text); font-family: "Inter", sans-serif; font-size: .95rem; line-height: 1.6;
+        padding: 16px; border-radius: 14px; outline: none; resize: vertical;
+        transition: border-color .2s, box-shadow .2s;
+      }
+      textarea#main-text:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+      .counter-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+      .counter-chip { background: rgba(255,255,255,.04); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; text-align: center; }
+      .counter-val { font-family: "Poppins", sans-serif; font-weight: 700; font-size: 1.15rem; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .counter-label { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 2px; }
+
+      .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+      .btn-tool {
+        background: rgba(255,255,255,.05); border: 1px solid var(--card-border); color: var(--text);
+        font-size: .82rem; font-weight: 600; padding: 13px 10px; border-radius: 12px; cursor: pointer; transition: all .2s;
+        font-family: "Inter", sans-serif;
+      }
+      .btn-tool:hover { border-color: var(--accent); color: var(--accent2); background: var(--accent-soft); transform: translateY(-1px); }
+
+      #font-select option, #font-weight option { background: #121826; color: #F8FAFC; padding: 10px; }
+      #font-select option:checked, #font-select option:hover,
+      #font-weight option:checked, #font-weight option:hover { background: var(--accent); color: #0B0B14; }
+
+      .action-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 18px; }
+      .btn-copy {
+        background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: #0B0B14;
+        font-family: "Poppins", sans-serif; font-weight: 700; font-size: .85rem; padding: 13px; border-radius: 12px;
+        cursor: pointer; transition: transform .15s, box-shadow .2s;
+      }
+      .btn-copy:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(128,87,255,.35); }
+      .btn-dl, .btn-clear {
+        background: transparent; border: 1px solid var(--card-border); color: var(--muted);
+        font-family: "Poppins", sans-serif; font-weight: 600; font-size: .82rem; padding: 13px; border-radius: 12px;
+        cursor: pointer; transition: all .2s;
+      }
+      .btn-dl:hover { border-color: var(--accent2); color: var(--accent2); }
+      .btn-clear:hover { border-color: var(--warn); color: var(--warn); }
+
+      .status { font-size: .75rem; color: var(--accent2); text-align: center; height: 16px; margin-top: 14px; opacity: 0; transition: opacity .3s; font-weight: 500; }
+      .status.show { opacity: 1; }
+
+      footer { position: relative; z-index: 1; text-align: center; padding: 36px 20px 8px; color: var(--muted); font-size: .78rem; }
+      footer .credit { margin-bottom: 12px; }
+      footer .credit a { color: var(--accent2); text-decoration: none; font-weight: 600; border-bottom: 1px solid rgba(34,211,238,.3); }
+      .social-row { display: flex; justify-content: center; gap: 14px; margin-bottom: 14px; }
+      .social-row a { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: rgba(255,255,255,.05); border: 1px solid var(--card-border); color: var(--muted); transition: all .2s; }
+      .social-row a:hover { color: var(--accent2); border-color: var(--accent2); background: rgba(34,211,238,.12); }
+      .social-row svg { width: 18px; height: 18px; fill: currentColor; }
+      .copyright { font-size: .7rem; color: #6b7190; letter-spacing: .02em; }
+    </style>
+  </head>
+  <body>
+    <div class="bg-anim">
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+    </div>
+
+    <div class="wrap">
+      <nav>
+        <div class="mark">D</div>
+        <div class="brand">Devex</div>
+        <div class="badge">Text Studio</div>
+      </nav>
+
+      <div class="hero">
+        <h1>Type it once,<br /><span>shape it any way.</span></h1>
+        <p>Change case, clean up markdown, slugify a title, and track word/character counts — instantly, in your browser.</p>
+      </div>
+
+      <div class="card">
+        <h3>Your Text</h3>
+        <textarea id="main-text" placeholder="Paste or type your text here...">Welcome to **Devex** Text Studio — the _easiest_ way to reshape your text!</textarea>
+
+        <div class="counter-row">
+          <div class="counter-chip"><div class="counter-val" id="char-count">0</div><div class="counter-label">Characters</div></div>
+          <div class="counter-chip"><div class="counter-val" id="word-count">0</div><div class="counter-label">Words</div></div>
+          <div class="counter-chip"><div class="counter-val" id="sentence-count">0</div><div class="counter-label">Sentences</div></div>
+          <div class="counter-chip"><div class="counter-val" id="read-time">0s</div><div class="counter-label">Read Time</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Typography</h3>
+
+        <div class="btn-grid" style="grid-template-columns: 1.3fr 1fr; margin-bottom: 16px;">
+          <div>
+            <label style="display:block;font-size:.78rem;color:var(--muted);margin-bottom:6px;font-weight:500;">Font Family</label>
+            <select id="font-select" onchange="applyStyle()" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--card-border);color:var(--text);font-size:.9rem;padding:11px 14px;border-radius:12px;outline:none;cursor:pointer;appearance:none;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A1A1B5'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 14px center;">
+            <option value="'Inter', sans-serif">Inter</option>
+            <option value="'Poppins', sans-serif">Poppins</option>
+            <option value="'Roboto', sans-serif">Roboto</option>
+            <option value="'Montserrat', sans-serif">Montserrat</option>
+            <option value="'Playfair Display', serif">Playfair Display</option>
+            <option value="'Merriweather', serif">Merriweather</option>
+            <option value="'Courier Prime', monospace">Courier Prime</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="Arial, sans-serif">Arial</option>
+          </select>
+          </div>
+          <div>
+            <div class="slider-row"><label style="margin:0">Font Size</label><span class="slider-val" id="fsize-val">15px</span></div>
+            <input type="range" id="font-size" min="10" max="72" value="15" oninput="applyStyle()" />
+          </div>
+        </div>
+
+        <div class="btn-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 16px;">
+          <div>
+            <label style="display:block;font-size:.78rem;color:var(--muted);margin-bottom:6px;font-weight:500;">Text Color</label>
+            <div class="color-pick">
+              <input type="color" id="text-color" value="#F8FAFC" oninput="applyStyle()" style="width:30px;height:30px;padding:0;border:none;border-radius:8px;cursor:pointer;flex-shrink:0;" />
+              <input type="text" id="text-color-hex" value="#F8FAFC" oninput="syncColorHex()" style="flex:1;background:transparent;border:none;color:var(--text);font-size:.85rem;outline:none;" />
+            </div>
+          </div>
+          <div>
+            <label style="display:block;font-size:.78rem;color:var(--muted);margin-bottom:6px;font-weight:500;">Font Weight</label>
+            <select id="font-weight" onchange="applyStyle()" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--card-border);color:var(--text);font-size:.9rem;padding:11px 14px;border-radius:12px;outline:none;cursor:pointer;appearance:none;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A1A1B5'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 14px center;">
+            <option value="400">Regular</option>
+            <option value="500">Medium</option>
+            <option value="600">SemiBold</option>
+            <option value="700">Bold</option>
+            <option value="800">ExtraBold</option>
+          </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label style="display:block;font-size:.78rem;color:var(--muted);margin-bottom:6px;font-weight:500;">Style &amp; Alignment</label>
+          <div class="btn-grid" style="grid-template-columns: repeat(5, 1fr);">
+            <button class="btn-tool" id="italic-btn" onclick="toggleItalic()" style="font-style:italic;">Italic</button>
+            <button class="btn-tool align-btn" data-align="left" onclick="setAlign('left')">⬅ Left</button>
+            <button class="btn-tool align-btn" data-align="center" onclick="setAlign('center')">Center</button>
+            <button class="btn-tool align-btn" data-align="right" onclick="setAlign('right')">Right ➡</button>
+            <button class="btn-tool align-btn" data-align="justify" onclick="setAlign('justify')">Justify</button>
+          </div>
+        </div>
+
+        <div class="btn-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 16px;">
+          <div>
+            <div class="slider-row"><label style="margin:0">Line Height</label><span class="slider-val" id="lh-val">1.6</span></div>
+            <input type="range" id="line-height" min="1" max="2.5" step="0.1" value="1.6" oninput="applyStyle()" />
+          </div>
+          <div>
+            <div class="slider-row"><label style="margin:0">Letter Spacing</label><span class="slider-val" id="ls-val">0px</span></div>
+            <input type="range" id="letter-spacing" min="-2" max="10" step="0.5" value="0" oninput="applyStyle()" />
+          </div>
+        </div>
+
+        <button class="btn-dl" style="width:100%;" onclick="copyCss()">📋 Copy CSS</button>
+      </div>
+
+      <div class="card">
+        <h3>Transform</h3>
+        <div class="btn-grid">
+          <button class="btn-tool" onclick="transform('upper')">UPPERCASE</button>
+          <button class="btn-tool" onclick="transform('lower')">lowercase</button>
+          <button class="btn-tool" onclick="transform('title')">Title Case</button>
+          <button class="btn-tool" onclick="transform('sentence')">Sentence case</button>
+          <button class="btn-tool" onclick="transform('slug')">slugify-text</button>
+          <button class="btn-tool" onclick="transform('markdown')">Markdown → Plain</button>
+          <button class="btn-tool" onclick="transform('trim')">Trim Extra Spaces</button>
+          <button class="btn-tool" onclick="transform('reverse')">esreveR txeT</button>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-copy" onclick="copyText()">📋 Copy Text</button>
+          <button class="btn-dl" onclick="downloadText()">↓ Download .txt</button>
+          <button class="btn-clear" onclick="clearText()">Clear</button>
+        </div>
+        <div class="status" id="status-msg"></div>
+      </div>
+
+      <footer>
+        <div class="credit">Created by <a href="https://github.com/BenkabaMarwa" target="_blank" rel="noopener">Marwa Benkaba</a></div>
+        <div class="social-row">
+          <a href="https://github.com/BenkabaMarwa" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.98 5.24.98 11.52c0 5.02 3.26 9.28 7.79 10.78.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.17.69-3.84-1.35-3.84-1.35-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.25 3.33.96.1-.74.4-1.25.72-1.54-2.53-.29-5.19-1.27-5.19-5.63 0-1.24.44-2.26 1.17-3.06-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.17a10.9 10.9 0 0 1 5.73 0c2.19-1.48 3.15-1.17 3.15-1.17.62 1.57.23 2.73.11 3.02.73.8 1.17 1.82 1.17 3.06 0 4.37-2.67 5.33-5.21 5.62.41.35.77 1.04.77 2.1 0 1.52-.01 2.74-.01 3.11 0 .3.21.66.79.55A10.53 10.53 0 0 0 23.02 11.5C23.02 5.24 18.27.5 12 .5z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/marwa-benkaba-916090329/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+          </a>
+        </div>
+        <div class="copyright">© 2026 Marwa Benkaba. All rights reserved.</div>
+      </footer>
+    </div>
+
+    <script>
+      const textarea = document.getElementById("main-text");
+
+      let isItalic = false;
+      let textAlign = "left";
+
+      function toggleItalic() {
+        isItalic = !isItalic;
+        document.getElementById("italic-btn").style.borderColor = isItalic ? "var(--accent)" : "var(--card-border)";
+        document.getElementById("italic-btn").style.color = isItalic ? "var(--accent2)" : "var(--text)";
+        applyStyle();
+      }
+
+      function setAlign(align) {
+        textAlign = align;
+        document.querySelectorAll(".align-btn").forEach((b) => {
+          const active = b.dataset.align === align;
+          b.style.borderColor = active ? "var(--accent)" : "var(--card-border)";
+          b.style.color = active ? "var(--accent2)" : "var(--text)";
+        });
+        applyStyle();
+      }
+
+      function syncColorHex() {
+        let val = document.getElementById("text-color-hex").value.trim();
+        if (!val.startsWith("#")) val = "#" + val;
+        if (/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(val)) {
+          document.getElementById("text-color").value = val;
+          applyStyle();
+        }
+      }
+
+      function applyStyle() {
+        const family = document.getElementById("font-select").value;
+        const size = document.getElementById("font-size").value;
+        const color = document.getElementById("text-color").value;
+        const weight = document.getElementById("font-weight").value;
+        const lh = document.getElementById("line-height").value;
+        const ls = document.getElementById("letter-spacing").value;
+
+        textarea.style.fontFamily = family;
+        textarea.style.fontSize = size + "px";
+        textarea.style.color = color;
+        textarea.style.fontWeight = weight;
+        textarea.style.fontStyle = isItalic ? "italic" : "normal";
+        textarea.style.textAlign = textAlign;
+        textarea.style.lineHeight = lh;
+        textarea.style.letterSpacing = ls + "px";
+
+        document.getElementById("fsize-val").textContent = size + "px";
+        document.getElementById("lh-val").textContent = lh;
+        document.getElementById("ls-val").textContent = ls + "px";
+        document.getElementById("text-color-hex").value = color.toUpperCase();
+      }
+
+      function copyCss() {
+        const family = document.getElementById("font-select").value;
+        const size = document.getElementById("font-size").value;
+        const color = document.getElementById("text-color").value;
+        const weight = document.getElementById("font-weight").value;
+        const lh = document.getElementById("line-height").value;
+        const ls = document.getElementById("letter-spacing").value;
+        const css = [
+          `font-family: ${family};`,
+          `font-size: ${size}px;`,
+          `font-weight: ${weight};`,
+          `font-style: ${isItalic ? "italic" : "normal"};`,
+          `color: ${color.toUpperCase()};`,
+          `text-align: ${textAlign};`,
+          `line-height: ${lh};`,
+          `letter-spacing: ${ls}px;`,
+        ].join("\n");
+        navigator.clipboard.writeText(css).then(() => showStatus("✓ CSS copied to clipboard", "#8057FF"));
+      }
+
+      function showStatus(msg, color = "#22D3EE") {
+        const el = document.getElementById("status-msg");
+        el.textContent = msg; el.style.color = color; el.classList.add("show");
+        setTimeout(() => el.classList.remove("show"), 2200);
+      }
+
+      function updateCounters() {
+        const text = textarea.value;
+        const chars = text.length;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        const sentences = text.trim() ? (text.match(/[.!?]+(\s|$)/g) || []).length || (text.trim() ? 1 : 0) : 0;
+        const minutes = words / 200;
+        const readTime = minutes < 1 ? Math.max(1, Math.round(minutes * 60)) + "s" : Math.round(minutes) + "m";
+
+        document.getElementById("char-count").textContent = chars;
+        document.getElementById("word-count").textContent = words;
+        document.getElementById("sentence-count").textContent = sentences;
+        document.getElementById("read-time").textContent = words ? readTime : "0s";
+      }
+      textarea.addEventListener("input", updateCounters);
+
+      function toTitleCase(str) {
+        const small = new Set(["a","an","the","and","but","or","nor","for","so","yet","at","by","in","of","on","to","up","as","is"]);
+        const words = str.toLowerCase().split(" ");
+        return words.map((w, i) => {
+          if (!w) return w;
+          if (i !== 0 && i !== words.length - 1 && small.has(w)) return w;
+          return w.charAt(0).toUpperCase() + w.slice(1);
+        }).join(" ");
+      }
+
+      function toSentenceCase(str) {
+        const lower = str.toLowerCase();
+        return lower.replace(/(^\s*\w|[.!?]\s+\w)/g, (c) => c.toUpperCase());
+      }
+
+      function slugify(str) {
+        return str.toLowerCase().trim()
+          .replace(/[^a-z0-9\s-]/g, "")
+          .replace(/\s+/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+      }
+
+      function markdownToPlain(str) {
+        return str
+          .replace(/```[\s\S]*?```/g, (m) => m.replace(/```/g, ""))
+          .replace(/`([^`]+)`/g, "$1")
+          .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+          .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+          .replace(/^#{1,6}\s+/gm, "")
+          .replace(/(\*\*\*|___)(.*?)\1/g, "$2")
+          .replace(/(\*\*|__)(.*?)\1/g, "$2")
+          .replace(/(\*|_)(.*?)\1/g, "$2")
+          .replace(/^>\s?/gm, "")
+          .replace(/^\s*[-*+]\s+/gm, "")
+          .replace(/^\s*\d+\.\s+/gm, "")
+          .replace(/^-{3,}\s*$/gm, "")
+          .replace(/\n{3,}/g, "\n\n")
+          .trim();
+      }
+
+      function transform(type) {
+        let text = textarea.value;
+        switch (type) {
+          case "upper": text = text.toUpperCase(); break;
+          case "lower": text = text.toLowerCase(); break;
+          case "title": text = toTitleCase(text); break;
+          case "sentence": text = toSentenceCase(text); break;
+          case "slug": text = slugify(text); break;
+          case "markdown": text = markdownToPlain(text); break;
+          case "trim": text = text.replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim(); break;
+          case "reverse": text = text.split("").reverse().join(""); break;
+        }
+        textarea.value = text;
+        updateCounters();
+        showStatus("✓ Transformed", "#22D3EE");
+      }
+
+      function copyText() {
+        if (!textarea.value) { showStatus("⚠ Nothing to copy", "#FF6B8A"); return; }
+        navigator.clipboard.writeText(textarea.value).then(() => showStatus("✓ Copied to clipboard", "#8057FF"));
+      }
+
+      function downloadText() {
+        if (!textarea.value) { showStatus("⚠ Nothing to download", "#FF6B8A"); return; }
+        const blob = new Blob([textarea.value], { type: "text/plain" });
+        const link = document.createElement("a");
+        link.download = "text.txt";
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        showStatus("↓ text.txt downloaded!", "#FBBF24");
+      }
+
+      function clearText() {
+        textarea.value = "";
+        updateCounters();
+        showStatus("Cleared", "#A1A1B5");
+      }
+
+      updateCounters();
+      setAlign("left");
+      applyStyle();
+    </script>
+  </body>
+</html>
