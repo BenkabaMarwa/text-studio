@@ -132,6 +132,3 @@ Potential enhancements include:
 
 This project is available for personal and educational use. Add a `LICENSE` file to the repository if you wish to distribute it under a specific open-source license.
 
----
-
-**Marwa Benkaba**
