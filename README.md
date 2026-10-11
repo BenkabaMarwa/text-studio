@@ -1,4 +1,4 @@
-# ✨ Devex Text Studio
+# ✨ Text Studio
 
 A modern, interactive text editing and typography tool designed to make working with text simple, fast, and stylish.
 
@@ -23,14 +23,14 @@ A modern, interactive text editing and typography tool designed to make working 
 ### 🔄 Text Transformation
 Transform your text instantly with the following tools:
 
-- **UPPERCASE** — Convert text to uppercase.
-- **lowercase** — Convert text to lowercase.
-- **Title Case** — Capitalize words appropriately.
-- **Sentence Case** — Format text as sentences.
-- **Slugify** — Convert text into URL-friendly slugs.
-- **Markdown to Plain Text** — Remove common Markdown formatting.
-- **Trim Extra Spaces** — Clean unnecessary spaces and line breaks.
-- **Reverse Text** — Reverse the character order.
+- **UPPERCASE**: Convert text to uppercase.
+- **lowercase**: Convert text to lowercase.
+- **Title Case**: Capitalize words appropriately.
+- **Sentence Case**: Format text as sentences.
+- **Slugify**: Convert text into URL-friendly slugs.
+- **Markdown to Plain Text**: Remove common Markdown formatting.
+- **Trim Extra Spaces**: Clean unnecessary spaces and line breaks.
+- **Reverse Text**: Reverse the character order.
 
 ### 📋 Export and Clipboard
 - Copy transformed text to the clipboard.
