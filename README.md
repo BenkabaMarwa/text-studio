@@ -134,4 +134,4 @@ This project is available for personal and educational use. Add a `LICENSE` file
 
 ---
 
-*Crafted with creativity and code. ✨*
+**Marwa Benkaba**
