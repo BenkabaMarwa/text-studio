@@ -74,13 +74,13 @@ The application is implemented in a single HTML file, making it lightweight and 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/BenkabaMarwa/devex-text-studio.git
+   git clone https://github.com/BenkabaMarwa/text-studio.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd devex-text-studio
+   cd text-studio
    ```
 
 3. Open `index.html` in your browser.
@@ -91,17 +91,7 @@ Alternatively, download the repository as a ZIP file and open `index.html` direc
 
 ## 📸 Screenshots
 
-Add screenshots of your application here to showcase its interface and features.
-
-```markdown
 ![Devex Text Studio - Main Interface](screenshots/main-interface.png)
-```
-
-To display your screenshot on GitHub:
-
-1. Create a folder named `screenshots` in the repository.
-2. Add your application screenshot to that folder.
-3. Update the image path above to match your screenshot filename.
 
 ## 🎯 Use Cases
 
