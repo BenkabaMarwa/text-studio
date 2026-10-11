@@ -47,10 +47,10 @@ Transform your text instantly with the following tools:
 
 ## 🛠️ Technologies Used
 
-- **HTML5** — Application structure.
-- **CSS3** — Styling, animations, gradients, and responsive design.
-- **JavaScript** — Text transformations, typography controls, clipboard operations, and statistics.
-- **Google Fonts** — Enhanced typography using Inter, Poppins, Roboto, Montserrat, Playfair Display, Merriweather, and Courier Prime.
+- **HTML5**: Application structure.
+- **CSS3**: Styling, animations, gradients, and responsive design.
+- **JavaScript**: Text transformations, typography controls, clipboard operations, and statistics.
+- **Google Fonts**: Enhanced typography using Inter, Poppins, Roboto, Montserrat, Playfair Display, Merriweather, and Courier Prime.
 
 ## 📂 Project Structure
 
