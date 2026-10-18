@@ -4,6 +4,8 @@ A modern, interactive text editing and typography tool designed to make working 
 
 **Devex Text Studio** lets you transform text, customize typography, analyze text statistics, and export your work through a clean, responsive interface with a dark purple aesthetic and vibrant gradient effects.
 
+![Devex Text Studio](screenshots/preview.jpg)
+
 ## 🚀 Features
 
 ### 📝 Text Editor
