@@ -93,7 +93,7 @@ Alternatively, download the repository as a ZIP file and open `index.html` direc
 
 ## 📸 Screenshots
 
-![Devex Text Studio - Main Interface](screenshots/main-interface.png)
+![Devex Text Studio - Main Interface](screenshots/main-interface.jpg)
 
 ## 🎯 Use Cases
 
