@@ -125,14 +125,10 @@ Potential enhancements include:
 
 ## 👩‍💻 Developer
 
-<p align="center">
-  <a href="https://github.com/BenkabaMarwa">
-    <img src="https://img.shields.io/badge/GitHub-BenkabaMarwa-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
-  </a>
-  <a href="https://www.linkedin.com/in/marwa-benkaba-916090329/">
-    <img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-  </a>
-</p>
+**Marwa Benkaba**
+
+- GitHub: [@BenkabaMarwa](https://github.com/BenkabaMarwa)
+- LinkedIn: [marwa-benkaba](https://www.linkedin.com/in/marwa-benkaba-916090329/)
 
 ## 📄 License
 
