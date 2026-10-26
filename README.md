@@ -127,15 +127,13 @@ Potential enhancements include:
 
 **Marwa Benkaba**
 
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
 ---
 
 
 - GitHub: [@BenkabaMarwa](https://github.com/BenkabaMarwa)
 - LinkedIn: [Connect on LinkedIn](https://www.linkedin.com/in/marwa-benkaba-916090329/)
 
+
+---
 
 
