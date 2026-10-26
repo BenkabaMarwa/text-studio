@@ -130,6 +130,5 @@ Potential enhancements include:
 - GitHub: [@BenkabaMarwa](https://github.com/BenkabaMarwa)
 - LinkedIn: [Connect on LinkedIn](https://www.linkedin.com/in/marwa-benkaba-916090329/)
 
-## 📄 License
 
 
